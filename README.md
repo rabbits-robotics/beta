@@ -156,6 +156,9 @@ Nucleo F303K8 を 1 枚に統合し、Raspberry Pi 5 からの UART 指令を受
 
 機体全体に関わる設計判断は `docs/` に日付付きで残す。
 
+- [docs/2026-07-19-architecture.md](docs/2026-07-19-architecture.md): システム全体の構成（Pi 5 / STM32 / rabcl / ゲームサーバ）をソースから起こしたメモ。gamma の設計に入る前の現状整理
+- [docs/2026-07-19-attracts_ws_architecture.md](docs/2026-07-19-attracts_ws_architecture.md): attracts_ws の ROS 2 ノード・トピック構成と改善点のメモ（同日）
+
 ## ライセンス
 
 このリポジトリの文書は © Rabbits Robotics、[CC BY 4.0](./LICENSE)。

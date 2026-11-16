@@ -41,6 +41,8 @@ colcon build
 | attracts_description / attracts_msgs | rabbits_description 4040d8e / rabbits_msgs 4e4d52a |
 | rabcl / rabcl_ros2 | 979e239 / 85bc1f9 |
 | udev | `/etc/udev/rules.d/99-attracts-serial.rules`（下記） |
+| 起動時の自動起動 | systemd のシステムサービス `/etc/systemd/system/ros2_launch.service`（下記。`multi-user.target` で有効、ユーザー `kota0314` で起動 10 秒後に `ros2 launch attracts_bridge stm32_bringup.launch.py`、失敗時 5 秒で再起動、出力は `~/ros2_launch.log` に追記） |
+| リモート | SSH（鍵）と GNOME のリモートデスクトップ（`gnome-remote-desktop` が有効、README 上部の RDP の項） |
 | Bluetooth | PS4 互換パッド「Wireless Controller」（1C:66:6D:CC:CB:0B）とキーボード ELECOM TK-DCP03 をペアリング済み |
 | 無線 | Wi-Fi は `rfkill` でソフトブロック（試合中の無線禁止）、Bluetooth は有効 |
 | その他 | `~/.bashrc` が `/opt/ros/jazzy` と `~/attracts_ws/install` を source、`~/.pio-venv` に PlatformIO 6.1.19、最後の launch ログは 2026-06-23 |
@@ -50,6 +52,29 @@ colcon build
 SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", ATTRS{serial}=="5567027502", SYMLINK+="ttyTransceiver"
 SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", ATTRS{serial}=="066DFF505682884967245827", SYMLINK+="ttySTM32"
 ```
+
+```ini
+# /etc/systemd/system/ros2_launch.service
+[Unit]
+Description=ROS2 Launch Service
+After=network.target
+
+[Service]
+User=kota0314
+Group=kota0314
+WorkingDirectory=/home/kota0314
+ExecStart=/usr/bin/bash -i -c "sleep 10 && source /opt/ros/jazzy/setup.bash && source /home/kota0314/attracts_ws/install/setup.bash && ros2 launch attracts_bridge stm32_bringup.launch.py"
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/home/kota0314/ros2_launch.log
+ProtectHome=false
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
+
+[Install]
+WantedBy=multi-user.target
+```
+
+メモ: 2026-11-16 の `apt upgrade` 後の再起動で SSH のホスト鍵が作り直された（cloud-init が「新しいインスタンス」として初回起動の処理を走らせたため。`/var/lib/cloud/instances/nocloud`）。PC 側の `known_hosts` を更新した。gamma 用に組み直すときは `sudo touch /etc/cloud/cloud-init.disabled` で cloud-init を止めておく。
 
 ## システム構成
 

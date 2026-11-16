@@ -45,7 +45,8 @@ colcon build
 | リモート | SSH（鍵）と GNOME のリモートデスクトップ（`gnome-remote-desktop` が有効、README 上部の RDP の項） |
 | Bluetooth | PS4 互換パッド「Wireless Controller」（1C:66:6D:CC:CB:0B）とキーボード ELECOM TK-DCP03 をペアリング済み |
 | 無線 | Wi-Fi は `rfkill` でソフトブロック（試合中の無線禁止）、Bluetooth は有効 |
-| その他 | `~/.bashrc` が `/opt/ros/jazzy` と `~/attracts_ws/install` を source、`~/.pio-venv` に PlatformIO 6.1.19、最後の launch ログは 2026-06-23 |
+| STM32 ファーム | `~/stm_ws/beta_main`（beta_main 4cf3545、origin と同期済み、submodule rabcl fc5a549）。`platformio.ini` に `platform_packages = toolchain-gccarmnoneeabi@~1.140201.0` を足して Pi（arm64）でビルド・書き込みできるようにしてあった（未コミットのまま） |
+| その他 | `~/.bashrc` が `/opt/ros/jazzy` と `~/attracts_ws/install` を source、`~/.pio-venv` に PlatformIO 6.1.19、最後の launch ログは 2026-06-23。2026-11-16 に gamma 用の `~/rabbits_ws` を追加し `.bashrc` の source をそちらへ切り替えた（`attracts_ws` は残置） |
 
 ```
 # /etc/udev/rules.d/99-attracts-serial.rules
